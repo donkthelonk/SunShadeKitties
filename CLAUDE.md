@@ -29,6 +29,14 @@ The core mechanic is the `KittyState` enum (`Sun` / `Shade`). State is owned by 
 
 All game scripts live in `Assets/Scripts/`. No editor scripts exist yet.
 
+### State Interactables
+
+`StateObject` — attach to any platform or world object to make it only solid/visible in one kitty state. Set `activeInState` to `Sun` or `Shade`. When inactive, the collider is disabled and the sprite fades to `inactiveAlpha` (default 25%) so the player can see it exists but pass through it.
+
+### Scene Setup Notes
+
+- The `groundCheck` Transform must be positioned at the player's **feet** (e.g. Y = -0.5), not the center. The ground layer mask on `PlayerController` must match the layer assigned to ground/platform objects.
+
 ### Unity 6 API Notes
 
 - Use `Rigidbody2D.linearVelocity` (not `.velocity` — renamed in Unity 6)

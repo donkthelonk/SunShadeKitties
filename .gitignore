@@ -31,5 +31,10 @@ Thumbs.db
 # Visual Studio cache
 .vs/
 
+# Unity-generated IDE files (regenerated automatically)
+*.csproj
+*.slnx
+*.sln
+
 # Crashlytics
 crashlytics-build.properties

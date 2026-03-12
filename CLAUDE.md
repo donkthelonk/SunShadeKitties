@@ -6,6 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **SunShade Kitties** — a Unity 2D platformer where the player controls a kitty that switches between a **Sun (light)** and **Shade (dark)** state. Each state has different interactions with light and dark elements in the world.
 
+- **GitHub:** https://github.com/donkthelonk/SunShadeKitties
 - **Unity version:** 6000.3.11f1 (Unity 6)
 - **Render pipeline:** Universal Render Pipeline (URP) 2D
 - **Input system:** Unity Input System (new, not legacy)

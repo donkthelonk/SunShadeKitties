@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask groundLayer;
 
+    [Header("Jump Feel")]
+    [SerializeField] private float coyoteTime = 0.15f;
+    [SerializeField] private float jumpBufferTime = 0.15f;
+
     public KittyState State { get; private set; } = KittyState.Sun;
 
     // Subscribe to this to react to Sun/Shade switches (lighting, interactables, visuals, etc.)
@@ -25,6 +29,9 @@ public class PlayerController : MonoBehaviour
     private InputSystem_Actions inputActions;
     private Vector2 moveInput;
     private bool isGrounded;
+    private float coyoteTimer;
+    private float jumpBufferTimer;
+    private float jumpCooldown;
 
     private void Awake()
     {
@@ -50,6 +57,24 @@ public class PlayerController : MonoBehaviour
     {
         moveInput = inputActions.Player.Move.ReadValue<Vector2>();
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+
+        jumpCooldown -= Time.deltaTime;
+        jumpBufferTimer -= Time.deltaTime;
+
+        // Only refresh coyote timer when grounded and not in the post-jump cooldown window
+        if (isGrounded && jumpCooldown <= 0f)
+            coyoteTimer = coyoteTime;
+        else if (!isGrounded)
+            coyoteTimer -= Time.deltaTime;
+
+        if (jumpBufferTimer > 0f && coyoteTimer > 0f)
+        {
+            jumpCooldown = 0.2f;
+            jumpBufferTimer = 0f;
+            coyoteTimer = 0f;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
     }
 
     private void FixedUpdate()
@@ -62,8 +87,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleJump(InputAction.CallbackContext ctx)
     {
-        if (isGrounded)
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        jumpBufferTimer = jumpBufferTime;
     }
 
     private void HandleSwitchState(InputAction.CallbackContext ctx)

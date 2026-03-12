@@ -36,6 +36,12 @@ All game scripts live in `Assets/Scripts/`. No editor scripts exist yet.
 ### Scene Setup Notes
 
 - The `groundCheck` Transform must be positioned at the player's **feet** (e.g. Y = -0.5), not the center. The ground layer mask on `PlayerController` must match the layer assigned to ground/platform objects.
+- The Player object must **not** be on any layer included in the `groundLayer` mask — otherwise `OverlapCircle` detects the player's own collider and `isGrounded` is always true.
+- Use a dedicated `Platform` layer for Sun/Shade platforms (not `Default`). Include both `Ground` and `Platform` in the `groundLayer` mask.
+
+### Jump Feel
+
+`PlayerController` has coyote time and jump buffer, both tunable in the Inspector under **Jump Feel**. Defaults: 0.15s each. After jumping, a `jumpCooldown` (0.2s) prevents the coyote timer from resetting until the player has physically left the ground.
 
 ### Unity 6 API Notes
 
